@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace UserRegistry.Entities
 {
     public class Usuary
@@ -24,7 +19,7 @@ namespace UserRegistry.Entities
 
         override public string ToString()
         {
-            return $"Name: {Name}, DocNumber: {DocNumber}, BirthDate: {BirthDate.ToShortDateString()}, Address: {Address}, HouseNumber: {HouseNumber}";
+            return $"Name: {Name}\nDocNumber: {DocNumber}\nBirthDate: {BirthDate.ToShortDateString()}\nAddress: {Address}\nHouseNumber: {HouseNumber}";
         }
     }
 }
