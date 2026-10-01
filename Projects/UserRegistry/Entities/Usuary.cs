@@ -3,12 +3,12 @@ namespace UserRegistry.Entities
     public class Usuary
     {
         public string? Name { get; set; }
-        public uint DocNumber { get; set; }
+        public string? DocNumber { get; set; }
         public DateTime BirthDate { get; set; }
         public string? Address { get; set; }
         public uint HouseNumber { get; set; }
 
-        public Usuary(string? name, uint docNumber, DateTime birthDate, string? address, uint houseNumber)
+        public Usuary(string? name, string? docNumber, DateTime birthDate, string? address, uint houseNumber)
         {
             Name = name;
             DocNumber = docNumber;

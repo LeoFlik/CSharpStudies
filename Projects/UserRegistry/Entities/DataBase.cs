@@ -24,7 +24,7 @@ namespace UserRegistry.Entities
             return UsuaryList;
         }
 
-        public List<Usuary>? GetUsuaryByDocNumber(uint docNumber)
+        public List<Usuary>? GetUsuaryByDocNumber(string? docNumber)
         {
             List<Usuary> usuaryListByDocNumber = UsuaryList.Where(u => u.DocNumber == docNumber).ToList();
             if(usuaryListByDocNumber.Count > 0)
@@ -37,7 +37,7 @@ namespace UserRegistry.Entities
             }
         }
 
-        public List<Usuary>? RemoveUsuaryByDocNumber(uint docNumber)
+        public List<Usuary>? RemoveUsuaryByDocNumber(string? docNumber)
         {
             List<Usuary> usuaryListByDocNumber = UsuaryList.Where(u => u.DocNumber == docNumber).ToList();
             if(usuaryListByDocNumber.Count > 0)

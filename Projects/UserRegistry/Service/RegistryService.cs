@@ -12,8 +12,8 @@ namespace UserRegistry.Service
             DataBase = dataBase;
             ResultEnumService = ResultEnumService.Success;
         }
-    
-        public void ShowMessages( string message)
+
+        public void ShowMessages(string message)
         {
             Console.WriteLine(message);
             Console.WriteLine("Press any key to continue...");
@@ -24,7 +24,7 @@ namespace UserRegistry.Service
         public ResultEnumService GetString(ref string input, string message)
         {
             Console.WriteLine(message);
-            string temp = Console.ReadLine()?? string.Empty;
+            string temp = Console.ReadLine() ?? string.Empty;
             if (temp == "s" || temp == "S")
             {
                 ResultEnumService = ResultEnumService.Exit;
@@ -34,7 +34,7 @@ namespace UserRegistry.Service
             {
                 ResultEnumService = ResultEnumService.Success;
                 input = temp;
-                
+
             }
             Console.Clear();
             return ResultEnumService;
@@ -59,7 +59,7 @@ namespace UserRegistry.Service
                         input = uint.Parse(temp);
                         ResultEnumService = ResultEnumService.Success;
                     }
-                   
+
                 }
                 catch (FormatException ex)
                 {
@@ -70,7 +70,7 @@ namespace UserRegistry.Service
                 {
                     ResultEnumService = ResultEnumService.Exception;
                     ShowMessages($"Error: {ex.Message}");
-                    
+
                 }
                 catch (ArgumentException ex)
                 {
@@ -78,7 +78,7 @@ namespace UserRegistry.Service
                     ShowMessages($"Error: {ex.Message}");
                 }
 
-            } while(ResultEnumService == ResultEnumService.Exception);
+            } while (ResultEnumService == ResultEnumService.Exception);
             Console.Clear();
             return ResultEnumService;
         }
@@ -118,11 +118,11 @@ namespace UserRegistry.Service
             return ResultEnumService;
         }
 
-        public ResultEnumService GetUsuary(ref Usuary usuary, string nameMessage, string docNumberMessage, string birthDateMessage, string addressMessage, string houseNumberMessage)
+        public ResultEnumService RegistryUser(ref Usuary usuary, string nameMessage, string docNumberMessage, string birthDateMessage, string addressMessage, string houseNumberMessage)
         {
             Console.Clear();
             string name = string.Empty;
-            uint docNumber = 0;
+            string? docNumber = string.Empty;
             DateTime birthDate = DateTime.MinValue;
             string address = string.Empty;
             uint houseNumber = 0;
@@ -130,7 +130,7 @@ namespace UserRegistry.Service
             if (GetString(ref name, nameMessage) == ResultEnumService.Exit)
                 return ResultEnumService.Exit;
 
-            if (GetUInt(ref docNumber, docNumberMessage) == ResultEnumService.Exit)
+            if (GetString(ref docNumber, docNumberMessage) == ResultEnumService.Exit)
                 return ResultEnumService.Exit;
 
             if (GetDateTime(ref birthDate, birthDateMessage) == ResultEnumService.Exit)
@@ -149,7 +149,7 @@ namespace UserRegistry.Service
             ShowMessages("User added successfully!");
             return ResultEnumService.Success;
         }
-        
+
         public void PrintUserInfo(Usuary usuary)
         {
             Console.WriteLine(usuary.ToString());
@@ -162,5 +162,81 @@ namespace UserRegistry.Service
                 Console.WriteLine("--------------------");
             }
         }
+
+        public void SerchUser()
+        {
+            Console.WriteLine("Enter the document number to search for users (or 's' to exit):");
+            string input = Console.ReadLine() ?? string.Empty.ToLower();
+            if (input == "s")
+                return;
+            List<Usuary>? usuaryList = DataBase.GetUsuaryByDocNumber(input);
+            if (usuaryList != null && usuaryList.Count > 0)
+            {
+                Console.WriteLine($"Found {usuaryList.Count} user(s) with DocNumber {input}:");
+                PrintUserInfoList(usuaryList);
+            }
+            else
+            {
+                Console.WriteLine($"No users found with DocNumber {input}.");
+            }
+            ShowMessages((string.Empty));
+        }
+
+        public void RemoveUser()
+        {
+            Console.WriteLine("Enter the document number to remove users (or 's' to exit):");
+            string input = Console.ReadLine() ?? string.Empty.ToLower();
+            if (input == "s")
+                return;
+            List<Usuary>? usuaryList = DataBase.RemoveUsuaryByDocNumber(input);
+            if (usuaryList != null && usuaryList.Count > 0)
+            {
+                Console.WriteLine($"Removed {usuaryList.Count} user(s) with DocNumber {input}:");
+                PrintUserInfoList(usuaryList);
+            }
+            else
+            {
+                Console.WriteLine($"No users found with DocNumber {input}.");
+            }
+            ShowMessages((string.Empty));
+        }
+
+
+        public void InitializeRegistryService()
+        {
+            DataBase dataBase = new DataBase();
+            RegistryService registryService = new RegistryService(dataBase);
+
+            while (true)
+            {
+                Console.WriteLine("User Registry System");
+                Console.WriteLine("1. Register User");
+                Console.WriteLine("2. Search User by Document Number");
+                Console.WriteLine("3. Remove User by Document Number");
+                Console.WriteLine("4. Exit");
+                Console.Write("Select an option: ");
+                string option = Console.ReadLine() ?? string.Empty;
+
+                switch (option)
+                {
+                    case "1":
+                        Usuary usuary = null!;
+                        registryService.RegistryUser(ref usuary, "Enter Name (or 's' to exit):", "Enter Document Number (or 's' to exit):", "Enter Birth Date (dd/MM/yyyy) (or 's' to exit):", "Enter Address (or 's' to exit):", "Enter House Number (or 's' to exit):");
+                        break;
+                    case "2":
+                        registryService.SerchUser();
+                        break;
+                    case "3":
+                        registryService.RemoveUser();
+                        break;
+                    case "4":
+                        return;
+                    default:
+                        registryService.ShowMessages("Invalid option. Please try again.");
+                        break;
+                }
+            }
+        }
     }
 }
+
