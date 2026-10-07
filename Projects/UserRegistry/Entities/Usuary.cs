@@ -16,7 +16,8 @@ namespace UserRegistry.Entities
             Address = address;
             HouseNumber = houseNumber;
         }
-
+        
+    
         override public string ToString()
         {
             return $"Name: {Name}\nDocNumber: {DocNumber}\nBirthDate: {BirthDate.ToShortDateString()}\nAddress: {Address}\nHouseNumber: {HouseNumber}";
