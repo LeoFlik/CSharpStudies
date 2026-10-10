@@ -41,6 +41,7 @@ public class GameManager
         if (!isCorrect && attempts >= _maxAttempts)
         {
             Console.WriteLine("Game over! You've used all your attempts.");
+            Console.WriteLine($"The correct number was: {rolledValue}");
             GameOver();
             RestartGame();
         }
